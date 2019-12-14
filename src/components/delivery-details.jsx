@@ -11,6 +11,10 @@ import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { RadioBtn } from "../utils/radio-btn";
 import data from "../utils/db.json";
 import { sharedStyle } from "../utils/shared-style";
+import _ from "lodash";
+import { goNext, goBack } from "../store/actions";
+import { connect } from "react-redux";
+import { Footer } from "../components/footer";
 
 export class DeliveryDetails extends React.Component {
   constructor(props) {
@@ -37,8 +41,8 @@ export class DeliveryDetails extends React.Component {
       <div style={{ marginTop: 15, marginBottom: 10 }}>
         <div>איזור היעד</div>
         <div>
-          <RadioBtn />
-          <RadioBtn />
+          <RadioBtn label="עזה" />
+          <RadioBtn label="איו''ש" />
         </div>
       </div>
     );
@@ -49,107 +53,79 @@ export class DeliveryDetails extends React.Component {
   };
 
   renderInputs = () => {
-    const {
-      values,
-      handleChange,
-      errors,
-      touched,
-      validateOnChange
-    } = this.props;
+    const { store } = this.props;
+    console.log(this.props.store);
     return (
-      <Form>
-        <div style={styles.inputsContainer}>
-          <div style={{ display: "flex", flexDirection: "column", flex: 2 }}>
+      <div style={styles.inputsContainer}>
+        <div style={{ display: "flex", flexDirection: "column", flex: 2 }}>
+          <CustomizedInput
+            label={label.ReciverName}
+            labelStyle={styles.text}
+            type={"string"}
+            icon={true}
+            // value={store.reciverName}
+            // error={errors.reciverName}
+            name="reciverName"
+            onChange={this.props.handleChange}
+          />
+          <CustomizedInput
+            value={store.ReciverAddress}
+            onChange={this.props.handleChange}
+            label={label.ReciverAddress}
+            labelStyle={styles.text}
+            icon={true}
+            name="ReciverAddress"
+          />
+          <DropDown label={label.passages} data={data.passages} />
+          <CustomizedInput
+            value={store.driverName}
+            label={label.driverName}
+            labelStyle={styles.text}
+            type={"string"}
+            name="driverName"
+            onChange={this.props.handleChange}
+          />
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", flex: 2 }}>
+          <CustomizedInput
+            value={store.reciverPhoneNumber}
+            label={label.reciverPhoneNumber}
+            labelStyle={styles.text}
+            onChange={this.props.handleChange}
+            type={"number"}
+            name="reciverPhoneNumber"
+          />
+          <div>
             <CustomizedInput
-              label={label.ReciverName}
-              labelStyle={styles.text}
-              type={"string"}
-              icon={true}
-              value={values.reciverName}
-              error={errors.reciverName}
-              name="reciverName"
+              value={store.MoneyValue}
               onChange={this.props.handleChange}
-            />
-            {errors.reciverName && touched.reciverName ? (
-              <div style={{ fontSize: 12, color: "red", fontWeight: "bold" }}>
-                יש למלא שם
-              </div>
-            ) : null}
-            <CustomizedInput
-              value={values.ReciverAddress}
-              onChange={this.props.handleChange}
-              label={label.ReciverAddress}
+              label={label.MoneyValue}
               labelStyle={styles.text}
-              icon={true}
-              name="ReciverAddress"
-            />
-            {errors.ReciverAddress && touched.ReciverAddress ? (
-              <div style={{ fontSize: 12, color: "red", fontWeight: "bold" }}>
-                יש למלא כתובת
-              </div>
-            ) : null}
-
-            <DropDown label={label.passages} data={data.passages} />
-            <CustomizedInput
-              value={values.driverName}
-              label={label.driverName}
-              labelStyle={styles.text}
-              type={"string"}
-              name="driverName"
-              onChange={this.props.handleChange}
-            />
-            {errors.driverName && touched.driverName ? (
-              <div style={{ fontSize: 12, color: "red", fontWeight: "bold" }}>
-                יש למלא שם נהג
-              </div>
-            ) : null}
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", flex: 2 }}>
-            <CustomizedInput
-              value={values.reciverPhoneNumber}
-              label={label.reciverPhoneNumber}
-              labelStyle={styles.text}
-              onChange={this.props.handleChange}
               type={"number"}
-              name="reciverPhoneNumber"
+              name="MoneyValue"
             />
-            {errors.reciverPhoneNumber && touched.reciverPhoneNumber ? (
-              <div style={{ fontSize: 12, color: "red", fontWeight: "bold" }}>
-                יש למלא מספר טלפון
-              </div>
-            ) : null}
-            <div>
-              <CustomizedInput
-                value={values.MoneyValue}
-                onChange={this.props.handleChange}
-                label={label.MoneyValue}
-                labelStyle={styles.text}
-                type={"number"}
-                name="MoneyValue"
-              />
-              {errors.MoneyValue && touched.MoneyValue ? (
+            {/* {errors.MoneyValue && touched.MoneyValue ? (
                 <div style={{ fontSize: 12, color: "red", fontWeight: "bold" }}>
                   יש למלא סכום
                 </div>
-              ) : null}
-              {/* <DropDown data={data.moneyType} /> */}
-            </div>
-            <CustomizedInput
-              value={values.driverId}
-              label={label.DriverId}
-              labelStyle={styles.text}
-              onChange={this.props.handleChange}
-              type={"number"}
-              name="driverId"
-            />
-            {errors.driverId && touched.driverId ? (
+              ) : null} */}
+            {/* <DropDown data={data.moneyType} /> */}
+          </div>
+          <CustomizedInput
+            value={store.driverId}
+            label={label.DriverId}
+            labelStyle={styles.text}
+            onChange={this.props.handleChange}
+            type={"number"}
+            name="driverId"
+          />
+          {/* {errors.driverId && touched.driverId ? (
               <div style={{ fontSize: 12, color: "red", fontWeight: "bold" }}>
                 יש למלא ת.ז נהג
               </div>
-            ) : null}
-          </div>
+            ) : null} */}
         </div>
-      </Form>
+      </div>
     );
   };
 
@@ -220,26 +196,49 @@ export class DeliveryDetails extends React.Component {
   }
 }
 
-const validationSchema = yup.object().shape({
-  reciverName: yup.string().required(),
-  ReciverAddress: yup.string().required(),
-  driverName: yup.string().required(),
-  reciverPhoneNumber: yup.number().required(),
-  MoneyValue: yup.number().required()
+// const validationSchema = yup.object().shape({
+//   reciverName: yup.string().required(),
+//   ReciverAddress: yup.string().required(),
+//   driverName: yup.string().required(),
+//   reciverPhoneNumber: yup.number().required(),
+//   MoneyValue: yup.number().required()
+// });
+
+// const DeliveryDetailsWithFormik = withFormik({
+//   validationSchema,
+//   mapPropsToValues(props) {
+//     const {
+//       reciverName,
+//       ReciverAddress,
+//       driverName,
+//       reciverPhoneNumber,
+//       MoneyValue
+//     } = props.reduxStore.deliveryDetails;
+//     return {
+//       reciverName,
+//       ReciverAddress,
+//       driverName,
+//       reciverPhoneNumber,
+//       MoneyValue
+//     };
+//   }
+// })(DeliveryDetails);
+
+const mapStateToProps = state => {
+  return {
+    store: state.deliveryDetails
+  };
+};
+
+const mapDispatchToProps = dispatch => ({
+  onClickNext: type => dispatch(goNext(type)),
+  onClickBack: type => dispatch(goBack(type))
 });
 
-export const DeliveryDetailsWithFormik = withFormik({
-  validationSchema,
-  mapPropsToValues(props) {
-    return {
-      reciverName: "",
-      ReciverAddress: "",
-      driverName: "",
-      reciverPhoneNumber: "",
-      MoneyValue: ""
-    };
-  }
-})(DeliveryDetails);
+export const DeliveryDetailsWithRedux = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DeliveryDetails);
 
 const styles = {
   container: { padding: 20 },

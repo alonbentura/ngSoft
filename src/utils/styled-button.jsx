@@ -1,5 +1,7 @@
 import React from "react";
 import { MdArrowForward } from "react-icons/md";
+
+
 export class StyledButton extends React.Component {
   constructor(props) {
     super(props);

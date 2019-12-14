@@ -23,6 +23,7 @@ export const companyID = "מספר ח''פ";
 export const companyContactName = "פרטי איש קשר בחברה";
 export const fullName = "שם מלא";
 export const id = "ת''ז";
+export const idNumber = "מספר ת''ז";
 export const country = "מדינת מקור";
 export const supplierInfo = "פרטי הספק";
 export const EmailAddress = "כתובת דוא''ל";
@@ -40,3 +41,8 @@ export const quantityRequested = "כמות מבוקשת";
 export const addMaterial = "הוספת מרכיב לפי שם, פורמולה או מספר CAS";
 export const attention2 =
   "לתשומת ליבך, החומרים המבוקשים והרכבם צריכים להיות מאושרים על ידי בעל/ת העסק או המנהל/ת";
+export const moreDocs = "מסמכים נוספים";
+export const statmentApprove = "אנא אשר/י את הפרטים הבאים:";
+export const statmentApproveDetails = (user, id) =>
+  `אני ${user} מספר ת''ז ${id} אבקש לאשר הבאה חד פעמית של המשלוח שפרטיו רשומים לעיל.
+   אני מאשר/ת שכל הפרטים הטופס זה מלאים נכונים ומדוייקים`;

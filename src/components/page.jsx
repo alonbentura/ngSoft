@@ -1,6 +1,6 @@
 import React from "react";
 import { StepsIndicator } from "./stepperBar";
-import { DeliveryDetailsWithFormik } from "./delivery-details";
+import { DeliveryDetailsWithRedux } from "./delivery-details";
 import { Footer } from "./footer";
 import { ApplicantDetails } from "./applicant-details";
 import { MaterialsDetails } from "./materials-details";
@@ -31,7 +31,7 @@ export class FormPage extends React.Component {
   renderComponent(pageNumber) {
     switch (pageNumber) {
       case 0:
-        return <DeliveryDetailsWithFormik />;
+        return <DeliveryDetailsWithRedux />;
       case 1:
         return <ApplicantDetails />;
       case 2:
@@ -39,7 +39,7 @@ export class FormPage extends React.Component {
       case 3:
         return <ApprovalWithFormik />;
       default:
-        return <DeliveryDetailsWithFormik />;
+        return null;
     }
   }
 

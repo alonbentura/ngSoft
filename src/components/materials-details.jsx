@@ -6,11 +6,14 @@ import * as label from "../utils/labels";
 import { DropDown } from "../utils/drop-down";
 import { sharedStyle } from "../utils/shared-style";
 import data from "../utils/db.json";
+import { ItemsList } from "./material-items-list";
 
 export class MaterialsDetails extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      items: []
+    };
   }
 
   headline() {
@@ -64,14 +67,35 @@ export class MaterialsDetails extends React.Component {
     );
   }
 
-  selectedMaterial = (option, value) => {
-    console.log(option.target.value);
+  selectedMaterial = (event, value) => {
+    const item = data.ingredients.find(
+      ingredient => ingredient.inventoryName === value
+    );
+    const index = this.state.items.indexOf(item);
+    if (index !== -1) {
+      return;
+    }
+    this.setState(prevState => ({
+      items: [...prevState.items, item]
+    }));
+  };
+
+  deleteFromList = item => {
+    let array = [...this.state.items];
+    const index = array.indexOf(item);
+    if (index !== -1) {
+      array.splice(index, 1);
+      this.setState({ items: array });
+    }
   };
 
   materialList() {
     return (
       <div style={sharedStyle.formContainer}>
         <div style={sharedStyle.formHeadlineText}>{label.materialList}</div>
+        <div>
+          <ItemsList items={this.state.items} deleteFromList={this.deleteFromList} icon={true} />
+        </div>
         <InputAutoComplete
           selectedMaterial={this.selectedMaterial}
           options={data.ingredients}
@@ -105,5 +129,16 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     flex: "2 1 0%"
-  }
+  },
+  file: {
+    boxShadow: "grey 0px 0px 9px 2px",
+    margin: "10px 0 10px 0",
+    width: "100%",
+    height: 35,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: 3
+  },
+  deleteFile: { width: 25, height: 25, cursor: "pointer", marginLeft: 8 }
 };
