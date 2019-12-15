@@ -2,7 +2,7 @@ import React from "react";
 import { StepsIndicator } from "./stepperBar";
 import { DeliveryDetailsWithFormik } from "./delivery-details";
 import { ApplicantDetailsWithFormik } from "./applicant-details";
-import { MaterialsDetails } from "./materials-details";
+import { MaterialsDetailsWithFormik } from "./materials-details";
 import { Approval } from "./approval";
 
 const page = {
@@ -23,16 +23,19 @@ export class FormPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentPage: 1,
+      currentPage: 0,
       deliveryDetails: {
         reciverName: "",
+        destationArea: "",
+        passages: "",
         ReciverAddress: "",
         driverName: "",
         driverId: "",
         file: "",
         notes: "",
         reciverPhoneNumber: "",
-        moneyValue: ""
+        moneyValue: "",
+        moneyType: ""
       },
       applicantDetails: {
         supplierName: "",
@@ -41,12 +44,23 @@ export class FormPage extends React.Component {
         EmailAddress: "",
         id: "",
         phoneNumber: "",
+        materialSource: "",
         fullName: "",
         faxNumber: "",
         antoherPhoneNumber: ""
+      },
+      materialsDetails: {
+        itemName: "",
+        unitMeasures: "",
+        itemDesignation: "",
+        quantityRequested: "",
+        category: "",
+
+        items: null
       }
     };
   }
+  
   changedeliveryDetails = data => {
     this.setState({ deliveryDetails: data });
   };
@@ -58,8 +72,10 @@ export class FormPage extends React.Component {
   };
 
   changeApplicantDetails = data => {
-    // console.log(data)
     this.setState({ applicantDetails: data });
+  };
+  changematerialsDetails = data => {
+    this.setState({ materialsDetails: data });
   };
 
   onClickEdit = pageToEdit => {
@@ -89,9 +105,11 @@ export class FormPage extends React.Component {
         );
       case 2:
         return (
-          <MaterialsDetails
+          <MaterialsDetailsWithFormik
             onClickBack={this.onClickBack}
             onClickNext={this.onClickNext}
+            materialsDetails={this.state.materialsDetails}
+            chnagesState={this.changematerialsDetails}
           />
         );
       case 3:

@@ -1,7 +1,6 @@
 import React from "react";
 import * as label from "../utils/labels";
 import { sharedStyle } from "../utils/shared-style";
-import { withFormik } from "formik";
 import { StyledButton } from "../utils/styled-button";
 import { ItemsList } from "./material-items-list";
 import CustomizedCheckbox from "../utils/checkbox";
@@ -26,7 +25,7 @@ export class Approval extends React.Component {
           </div>
           <div style={styles.row}>
             <div style={styles.text}> {label.materialSource}:</div>
-            {applicantDetails.supplierName}
+            {applicantDetails.materialSource}
           </div>
         </div>
         <div style={{ flex: 2 }}>
@@ -44,22 +43,28 @@ export class Approval extends React.Component {
   }
 
   itemsColmun() {
+    const { materialsDetails } = this.props.data;
+
     return (
       <div style={{ ...styles.insideFormContainer, border: "none" }}>
         <div style={{ flex: 2 }}>
-          <div>
+          <div style={styles.row}>
             <div style={styles.text}>{label.item}:</div>
+            {materialsDetails.itemName}
           </div>
-          <div>
+          <div style={styles.row}>
             <div style={styles.text}> {label.ItemDesignation}:</div>
+            {materialsDetails.itemDesignation}
           </div>
         </div>
         <div style={{ flex: 2 }}>
-          <div>
+          <div style={styles.row}>
             <div style={styles.text}> {label.category}:</div>
+            {materialsDetails.category}
           </div>
-          <div>
+          <div style={styles.row}>
             <div style={styles.text}> {label.quantityRequested}:</div>
+            {materialsDetails.quantityRequested} {materialsDetails.unitMeasures}
           </div>
         </div>
       </div>
@@ -113,6 +118,7 @@ export class Approval extends React.Component {
           </div>
           <div style={styles.row}>
             <div style={styles.text}> {label.passages}:</div>
+            {deliveryDetails.passages}
           </div>
           <div style={styles.row}>
             <div style={styles.text}> {label.driverName}:</div>
@@ -120,7 +126,7 @@ export class Approval extends React.Component {
           </div>
           <div style={styles.row}>
             <div style={styles.text}> {label.destination}:</div>
-            {deliveryDetails.ReciverAddress}
+            {deliveryDetails.ReciverAddress} , {deliveryDetails.destationArea}
           </div>
         </div>
         <div style={{ flex: 2 }}>
@@ -130,7 +136,8 @@ export class Approval extends React.Component {
           </div>
           <div style={styles.row}>
             <div style={styles.text}> {label.MoneyValue}:</div>
-            {deliveryDetails.moneyValue}
+            {deliveryDetails.moneyValue} {deliveryDetails.moneyType}
+            {}
           </div>
           <div style={styles.row}>
             <div style={styles.text}> {label.DriverId}:</div>
@@ -167,9 +174,13 @@ export class Approval extends React.Component {
       <div style={sharedStyle.formContainer}>
         <div style={sharedStyle.formHeadlineText}>{label.materialDetails}</div>
         {this.itemsColmun()}
-        <ItemsList items={[]} />
+        <ItemsList items={this.props.data.materialsDetails.items} />
         <div style={styles.btnContainer}>
-          <StyledButton label="עריכה" style={styles.editBtn} />
+          <StyledButton
+            label="עריכה"
+            style={styles.editBtn}
+            onClick={this.edit.bind(this, 2)}
+          />
         </div>
       </div>
     );
@@ -224,6 +235,7 @@ export class Approval extends React.Component {
         {this.deliveryDetails()}
         {this.statementApprove()}
         <Footer
+          confirm="אישור"
           onClickNext={this.props.onClickNext}
           onClickBack={this.props.onClickBack}
         />

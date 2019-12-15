@@ -11,6 +11,7 @@ export const moreInfo = "מידע נוסף (אופציונלי)";
 export const back = "חזרה";
 export const forward = "המשך";
 export const destination = "יעד למשלוח";
+export const destinationArea = "איזור היעד";
 export const attention =
   "לתשומת ליבך , יש למלא את כל הפרטים המסומנים כדי להמשיך";
 export const deliveryDetails = "פרטי המשלוח";

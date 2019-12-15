@@ -9,20 +9,31 @@ import { withFormik } from "formik";
 import { sharedStyle } from "../utils/shared-style";
 
 const inputdToRender = [
-  { label: label.fullName, type: "string", name: "fullName" },
+  {
+    label: label.fullName,
+    type: "string",
+    name: "fullName",
+    err: "יש להזין שם מלא"
+  },
   {
     label: label.EmailAddress,
     type: "string",
     name: "EmailAddress",
-    icon: true
+    icon: true,
+    err: "יש להזין מייל"
   },
+  {
+    label: label.phoneNumber,
+    type: "number",
+    name: "phoneNumber",
+    err: "יש להזין מספר טלפון"
+  },
+  { label: label.id, type: "number", name: "id"  ,err: 'יש להזין ת.ז'},
   {
     label: label.antoherPhoneNumber,
     type: "number",
     name: "antoherPhoneNumber"
   },
-  { label: label.id, type: "number", name: "id" },
-  { label: label.phoneNumber, type: "number", name: "phoneNumber" },
   { label: label.faxNumber, type: "string", name: "faxNumber" }
 ];
 
@@ -71,7 +82,12 @@ class ApplicantDetails extends React.Component {
           ) : null}
         </div>
         <div style={styles.inputs}>
-          <DropDown label={label.materialSource} data={data.origins} />
+          <DropDown
+            label={label.materialSource}
+            data={data.origins}
+            name={"materialSource"}
+            onChange={this.props.handleChange}
+          />
           <CustomizedInput
             label={label.country}
             labelStyle={styles.text}
@@ -98,7 +114,7 @@ class ApplicantDetails extends React.Component {
   companyContactName() {
     const firstColumn = inputdToRender.slice(0, 3);
     const secondClumn = inputdToRender.slice(3, 6);
-    const { values } = this.props;
+    const { values, errors } = this.props;
     return (
       <div style={sharedStyle.formContainer}>
         <div style={sharedStyle.formHeadlineText}>
@@ -108,30 +124,41 @@ class ApplicantDetails extends React.Component {
           <div style={styles.inputs}>
             {firstColumn.map(input => {
               return (
-                <CustomizedInput
-                  label={input.label}
-                  labelStyle={styles.text}
-                  type={input.type}
-                  name={input.name}
-                  icon={input.icon}
-                  onChange={this.props.handleChange}
-                  value={values[input.name]}
-                />
+                <div>
+                  <CustomizedInput
+                    label={input.label}
+                    labelStyle={styles.text}
+                    type={input.type}
+                    name={input.name}
+                    icon={input.icon}
+                    onChange={this.props.handleChange}
+                    value={values[input.name]}
+                  />
+
+                  {errors[input.name] ? (
+                    <div style={styles.err}>{input.err}</div>
+                  ) : null}
+                </div>
               );
             })}
           </div>
           <div style={styles.inputs}>
             {secondClumn.map(input => {
               return (
-                <CustomizedInput
-                  label={input.label}
-                  labelStyle={styles.text}
-                  type={input.type}
-                  name={input.name}
-                  icon={input.icon}
-                  onChange={this.props.handleChange}
-                  value={values[input.name]}
-                />
+                <div>
+                  <CustomizedInput
+                    label={input.label}
+                    labelStyle={styles.text}
+                    type={input.type}
+                    name={input.name}
+                    icon={input.icon}
+                    onChange={this.props.handleChange}
+                    value={values[input.name]}
+                  />
+                  {errors[input.name] ? (
+                    <div style={styles.err}>{input.err}</div>
+                  ) : null}
+                </div>
               );
             })}
           </div>
@@ -151,6 +178,7 @@ class ApplicantDetails extends React.Component {
       phoneNumber: values.phoneNumber,
       fullName: values.fullName,
       faxNumber: values.faxNumber,
+      materialSource: values.materialSource,
       antoherPhoneNumber: values.antoherPhoneNumber
     };
     if (this.props.isValid) {
@@ -195,6 +223,7 @@ export const ApplicantDetailsWithFormik = withFormik({
       id,
       phoneNumber,
       fullName,
+      materialSource,
       faxNumber,
       antoherPhoneNumber
     } = props.applicantDetails;
@@ -205,6 +234,7 @@ export const ApplicantDetailsWithFormik = withFormik({
       EmailAddress,
       id,
       phoneNumber,
+      materialSource,
       antoherPhoneNumber,
       faxNumber,
       fullName

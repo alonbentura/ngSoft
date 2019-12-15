@@ -5,10 +5,10 @@ import { FaRegQuestionCircle } from "react-icons/fa";
 import * as label from "../utils/labels";
 import { DropDown } from "../utils/drop-down";
 import { StyledButton } from "../utils/styled-button";
-import { MdClose } from "react-icons/md";
+import { MdClose, MdKeyboardBackspace } from "react-icons/md";
 import { withFormik, Form } from "formik";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
-import { RadioBtn } from "../utils/radio-btn";
+import RadioButtonsGroup from "../utils/radio-btn";
 import data from "../utils/db.json";
 import { sharedStyle } from "../utils/shared-style";
 import _ from "lodash";
@@ -40,10 +40,13 @@ export class DeliveryDetails extends React.Component {
   renderRadioBtn = () => {
     return (
       <div style={{ marginTop: 15, marginBottom: 10 }}>
-        <div>איזור היעד</div>
+        <div>{label.destinationArea}</div>
         <div>
-          <RadioBtn label="עזה" />
-          <RadioBtn label="איו''ש" />
+          <RadioButtonsGroup
+            handleChange={this.props.handleChange}
+            name="destationArea"
+            value={this.props.values.destationArea}
+          />
         </div>
       </div>
     );
@@ -84,11 +87,11 @@ export class DeliveryDetails extends React.Component {
           <DropDown
             label={label.passages}
             data={data.passages}
+            value={values.passages}
             onChange={this.props.handleChange}
+            name="passages"
           />
-          {errors.reciverName ? (
-            <div style={styles.err}>יש לבחור מעבר</div>
-          ) : null}
+          {errors.passages ? <div style={styles.err}>יש לבחור מעבר</div> : null}
           <CustomizedInput
             value={values.driverName}
             label={label.driverName}
@@ -114,25 +117,42 @@ export class DeliveryDetails extends React.Component {
             <div style={styles.err}>יש למלא מספר מקבל המשלוח</div>
           ) : null}
           <div
-            style={{ display: "flex", alignItems: "flex-end", width: "91%" }}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+              width: "91%"
+            }}
           >
-            <CustomizedInput
-              value={values.moneyValue}
-              onChange={this.props.handleChange}
-              label={label.MoneyValue}
-              labelStyle={styles.text}
-              type={"number"}
-              name="moneyValue"
-            />
-            <DropDown
-              data={data.moneyType}
-              style={{ width: "40%", marginLeft: 0 }}
-              onChange={this.props.handleChange}
-            />
+            <div
+              style={{
+                display: "flex",
+                width: "100%",
+                flexDirection: "row",
+                alignItems: "flex-end"
+              }}
+            >
+              <CustomizedInput
+                value={values.moneyValue}
+                onChange={this.props.handleChange}
+                label={label.MoneyValue}
+                labelStyle={styles.text}
+                type={"number"}
+                name="moneyValue"
+              />
+              <DropDown
+                data={data.moneyType}
+                value={values.moneyType}
+                style={{ width: "40%", marginLeft: 0 }}
+                onChange={this.props.handleChange}
+                name="moneyType"
+              />
+            </div>
             {errors.moneyValue ? (
               <div style={styles.err}>יש למלא סכום</div>
             ) : null}
           </div>
+
           <CustomizedInput
             value={values.driverId}
             label={label.DriverId}
@@ -226,7 +246,10 @@ export class DeliveryDetails extends React.Component {
       driverId: values.driverId,
       reciverPhoneNumber: values.reciverPhoneNumber,
       moneyValue: values.moneyValue,
+      passages: values.passages,
+      moneyType: values.moneyType,
       file: this.state.file,
+      destationArea: values.destationArea,
       notes: values.notes
     };
 
@@ -260,6 +283,7 @@ const validationSchema = yup.object().shape({
   reciverPhoneNumber: yup.number().required(),
   moneyValue: yup.number().required(),
   driverId: yup.number().required()
+  // moneyType: yup.required().string(),
 });
 
 export const DeliveryDetailsWithFormik = withFormik({
@@ -274,7 +298,10 @@ export const DeliveryDetailsWithFormik = withFormik({
       moneyValue,
       notes,
       file,
-      driverId
+      driverId,
+      moneyType,
+      passages,
+      destationArea
     } = props.deliveryDetails;
     return {
       reciverName,
@@ -283,8 +310,11 @@ export const DeliveryDetailsWithFormik = withFormik({
       reciverPhoneNumber,
       moneyValue,
       driverId,
+      destationArea,
       notes,
-      file
+      file,
+      moneyType,
+      passages
     };
   }
 })(DeliveryDetails);

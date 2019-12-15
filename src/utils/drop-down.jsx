@@ -42,7 +42,7 @@ const BootstrapInput = withStyles(theme => ({
 
 const useStyles = makeStyles(theme => ({
   margin: {
-    margin: theme.spacing(1),
+    margin: theme.spacing(0.5),
     width: "90%"
   }
 }));
@@ -50,10 +50,7 @@ const useStyles = makeStyles(theme => ({
 export function DropDown(props) {
   const classes = useStyles();
   const data1 = _.get(props, "data", []);
-  const [age, setAge] = React.useState("");
-  const handleChange = event => {
-    setAge(event.target.value);
-  };
+
   return (
     <FormControl
       style={props.style ? props.style : null}
@@ -62,16 +59,13 @@ export function DropDown(props) {
       <div style={{ marginBottom: 5 }}>{props.label}</div>
       <NativeSelect
         id="demo-customized-select-native"
-        value={age}
-        onChange={handleChange}
-        input={<BootstrapInput style={{ width: "100%" }} onChange={props.onChange} />}
+        value={props.value}
+        onChange={props.onChange}
+        name={props.name}
+        input={<BootstrapInput style={{ width: "100%" }} />}
       >
         {data1.map(item => {
-          return (
-            <option key={item.id} value={item.title}>
-              {item.title}
-            </option>
-          );
+          return <option key={item.id} value={item.title} label={item.title} />;
         })}
       </NativeSelect>
     </FormControl>

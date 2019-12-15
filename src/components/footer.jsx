@@ -17,7 +17,7 @@ export class Footer extends React.Component {
           onClick={this.props.onClickBack}
         />
         <StyledButton
-          label={forward}
+          label={this.props.confirm ? this.props.confirm : forward}
           onClick={this.props.onClickNext}
         ></StyledButton>
       </div>
