@@ -1,10 +1,9 @@
 import React from "react";
 import { StepsIndicator } from "./stepperBar";
-import { DeliveryDetailsWithRedux } from "./delivery-details";
-import { Footer } from "./footer";
-import { ApplicantDetails } from "./applicant-details";
+import { DeliveryDetailsWithFormik } from "./delivery-details";
+import { ApplicantDetailsWithFormik } from "./applicant-details";
 import { MaterialsDetails } from "./materials-details";
-import { ApprovalWithFormik } from "./approval";
+import { Approval } from "./approval";
 
 const page = {
   0: "deliveryDetails",
@@ -24,20 +23,86 @@ export class FormPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentPage: 0
+      currentPage: 1,
+      deliveryDetails: {
+        reciverName: "",
+        ReciverAddress: "",
+        driverName: "",
+        driverId: "",
+        file: "",
+        notes: "",
+        reciverPhoneNumber: "",
+        moneyValue: ""
+      },
+      applicantDetails: {
+        supplierName: "",
+        country: "",
+        companyID: "",
+        EmailAddress: "",
+        id: "",
+        phoneNumber: "",
+        fullName: "",
+        faxNumber: "",
+        antoherPhoneNumber: ""
+      }
     };
   }
+  changedeliveryDetails = data => {
+    this.setState({ deliveryDetails: data });
+  };
+
+  deletefile = file => {
+    this.setState(state => {
+      state.deliveryDetails.file = file;
+    });
+  };
+
+  changeApplicantDetails = data => {
+    // console.log(data)
+    this.setState({ applicantDetails: data });
+  };
+
+  onClickEdit = pageToEdit => {
+    this.setState({ currentPage: pageToEdit });
+  };
 
   renderComponent(pageNumber) {
     switch (pageNumber) {
       case 0:
-        return <DeliveryDetailsWithRedux />;
+        return (
+          <DeliveryDetailsWithFormik
+            onClickBack={this.onClickBack}
+            onClickNext={this.onClickNext}
+            deliveryDetails={this.state.deliveryDetails}
+            chnagesState={this.changedeliveryDetails}
+            deletefile={this.deletefile}
+          />
+        );
       case 1:
-        return <ApplicantDetails />;
+        return (
+          <ApplicantDetailsWithFormik
+            onClickBack={this.onClickBack}
+            onClickNext={this.onClickNext}
+            applicantDetails={this.state.applicantDetails}
+            chnagesState={this.changeApplicantDetails}
+          />
+        );
       case 2:
-        return <MaterialsDetails />;
+        return (
+          <MaterialsDetails
+            onClickBack={this.onClickBack}
+            onClickNext={this.onClickNext}
+          />
+        );
       case 3:
-        return <ApprovalWithFormik />;
+        return (
+          <Approval
+            onClickBack={this.onClickBack}
+            onClickNext={this.onClickNext}
+            data={this.state}
+            onClickEdit={this.onClickEdit}
+          />
+        );
       default:
         return null;
     }
@@ -64,10 +129,6 @@ export class FormPage extends React.Component {
         <div style={textStyle}>טופס איכות הסביבה</div>
         <StepsIndicator currentPage={page[currentPage]}></StepsIndicator>
         {this.renderComponent(currentPage)}
-        <Footer
-          onClickNext={this.onClickNext}
-          onClickBack={this.onClickBack}
-        ></Footer>
       </div>
     );
   }

@@ -55,13 +55,16 @@ export function DropDown(props) {
     setAge(event.target.value);
   };
   return (
-    <FormControl className={classes.margin}>
+    <FormControl
+      style={props.style ? props.style : null}
+      className={classes.margin}
+    >
       <div style={{ marginBottom: 5 }}>{props.label}</div>
       <NativeSelect
         id="demo-customized-select-native"
         value={age}
         onChange={handleChange}
-        input={<BootstrapInput style={{ width: "100%" }} />}
+        input={<BootstrapInput style={{ width: "100%" }} onChange={props.onChange} />}
       >
         {data1.map(item => {
           return (

@@ -5,6 +5,8 @@ import { AiOutlineExclamationCircle } from "react-icons/ai";
 import * as label from "../utils/labels";
 import { DropDown } from "../utils/drop-down";
 import { sharedStyle } from "../utils/shared-style";
+import { Footer } from "../components/footer";
+
 import data from "../utils/db.json";
 import { ItemsList } from "./material-items-list";
 
@@ -114,6 +116,10 @@ export class MaterialsDetails extends React.Component {
         {this.headline()}
         {this.itemForm()}
         {this.materialList()}
+        <Footer
+            onClickNext={this.props.onClickNext}
+            onClickBack={this.props.onClickBack}
+          />
       </div>
     );
   }

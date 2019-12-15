@@ -65,6 +65,7 @@ export function CustomizedInput(props) {
         ) : null}
       </div>
       <Input
+        defaultValue={props.defaultValue}
         value={props.value}
         name={props.name}
         defaultValue=""

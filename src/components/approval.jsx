@@ -5,6 +5,7 @@ import { withFormik } from "formik";
 import { StyledButton } from "../utils/styled-button";
 import { ItemsList } from "./material-items-list";
 import CustomizedCheckbox from "../utils/checkbox";
+import { Footer } from "../components/footer";
 
 export class Approval extends React.Component {
   constructor(props) {
@@ -15,22 +16,27 @@ export class Approval extends React.Component {
   }
 
   applicantDetailsFirstColmun() {
+    const { applicantDetails } = this.props.data;
     return (
       <div style={styles.insideFormContainer}>
         <div style={{ flex: 2 }}>
-          <div>
+          <div style={styles.row}>
             <div style={styles.text}>{label.supplierName}:</div>
+            {applicantDetails.supplierName}
           </div>
-          <div>
+          <div style={styles.row}>
             <div style={styles.text}> {label.materialSource}:</div>
+            {applicantDetails.supplierName}
           </div>
         </div>
         <div style={{ flex: 2 }}>
-          <div>
+          <div style={styles.row}>
             <div style={styles.text}> {label.companyID}:</div>
+            {applicantDetails.companyID}
           </div>
-          <div>
+          <div style={styles.row}>
             <div style={styles.text}> {label.country}:</div>
+            {applicantDetails.country}
           </div>
         </div>
       </div>
@@ -61,28 +67,35 @@ export class Approval extends React.Component {
   }
 
   applicantDetailsSecondColmun() {
+    const { applicantDetails } = this.props.data;
     return (
       <div style={{ ...styles.insideFormContainer, border: "none" }}>
         <div style={{ flex: 2 }}>
-          <div>
+          <div style={styles.row}>
             <div style={styles.text}>{label.companyContactName}:</div>
+            {applicantDetails.fullName}
           </div>
-          <div>
+          <div style={styles.row}>
             <div style={styles.text}> {label.EmailAddress}:</div>
+            {applicantDetails.EmailAddress}
           </div>
-          <div>
+          <div style={styles.row}>
             <div style={styles.text}> {label.antoherPhoneNumber}:</div>
+            {applicantDetails.antoherPhoneNumber}
           </div>
         </div>
         <div style={{ flex: 2 }}>
-          <div>
+          <div style={styles.row}>
             <div style={styles.text}> {label.idNumber}:</div>
+            {applicantDetails.id}
           </div>
-          <div>
+          <div style={styles.row}>
             <div style={styles.text}> {label.phoneNumber}:</div>
+            {applicantDetails.phoneNumber}
           </div>
-          <div>
+          <div style={styles.row}>
             <div style={styles.text}> {label.faxNumber}:</div>
+            {applicantDetails.faxNumber}
           </div>
         </div>
       </div>
@@ -90,36 +103,47 @@ export class Approval extends React.Component {
   }
 
   deliveryDetailsColmun() {
+    const { deliveryDetails } = this.props.data;
     return (
       <div style={styles.insideFormContainer}>
         <div style={{ flex: 2 }}>
-          <div>
+          <div style={styles.row}>
             <div style={styles.text}>{label.ReciverName}:</div>
+            {deliveryDetails.reciverName}
           </div>
-          <div>
+          <div style={styles.row}>
             <div style={styles.text}> {label.passages}:</div>
           </div>
-          <div>
+          <div style={styles.row}>
             <div style={styles.text}> {label.driverName}:</div>
+            {deliveryDetails.driverName}
           </div>
-          <div>
+          <div style={styles.row}>
             <div style={styles.text}> {label.destination}:</div>
+            {deliveryDetails.ReciverAddress}
           </div>
         </div>
         <div style={{ flex: 2 }}>
-          <div>
+          <div style={styles.row}>
             <div style={styles.text}> {label.reciverPhoneNumber}:</div>
+            {deliveryDetails.reciverPhoneNumber}
           </div>
-          <div>
+          <div style={styles.row}>
             <div style={styles.text}> {label.MoneyValue}:</div>
+            {deliveryDetails.moneyValue}
           </div>
-          <div>
+          <div style={styles.row}>
             <div style={styles.text}> {label.DriverId}:</div>
+            {deliveryDetails.driverId}
           </div>
         </div>
       </div>
     );
   }
+
+  edit = page => {
+    this.props.onClickEdit(page);
+  };
 
   applicantDetails() {
     return (
@@ -128,7 +152,11 @@ export class Approval extends React.Component {
         {this.applicantDetailsFirstColmun()}
         {this.applicantDetailsSecondColmun()}
         <div style={styles.btnContainer}>
-          <StyledButton label="עריכה" style={styles.editBtn} />
+          <StyledButton
+            label="עריכה"
+            style={styles.editBtn}
+            onClick={this.edit.bind(this, 1)}
+          />
         </div>
       </div>
     );
@@ -148,10 +176,13 @@ export class Approval extends React.Component {
   }
 
   moreFiles = () => {
+    const { deliveryDetails } = this.props.data;
+
     return (
       <div style={{ ...styles.insideFormContainer, border: "none" }}>
         <div>
           <div style={styles.text}>{label.moreDocs}:</div>
+          {deliveryDetails.file.name}
         </div>
       </div>
     );
@@ -163,7 +194,11 @@ export class Approval extends React.Component {
         {this.deliveryDetailsColmun()}
         {this.moreFiles()}
         <div style={styles.btnContainer}>
-          <StyledButton label="עריכה" style={styles.editBtn} />
+          <StyledButton
+            label="עריכה"
+            style={styles.editBtn}
+            onClick={this.edit.bind(this, 0)}
+          />
         </div>
       </div>
     );
@@ -188,12 +223,14 @@ export class Approval extends React.Component {
         {this.materialsDetails()}
         {this.deliveryDetails()}
         {this.statementApprove()}
+        <Footer
+          onClickNext={this.props.onClickNext}
+          onClickBack={this.props.onClickBack}
+        />
       </div>
     );
   }
 }
-
-export const ApprovalWithFormik = withFormik({})(Approval);
 
 const styles = {
   container: { padding: 20 },
@@ -227,5 +264,9 @@ const styles = {
   btnContainer: {
     display: "flex",
     justifyContent: "flex-end"
+  },
+  row: {
+    display: "flex",
+    alignItems: "center"
   }
 };
